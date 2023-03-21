@@ -83,14 +83,14 @@ class TodoController extends Controller
         return back()->with('message', 'Task was deleted successfully! <a href="/todos/'.$todo->id.'/restore">UNDO</a>');
     }
 
-    public function restore(Todo $todo){
+    public function restore($todo){        
+        $trashed_todo = Todo::withTrashed()->find($todo);
         // Make sure user is an owner
-        if (! Gate::allows('update-todo', $todo)) {
+        if (! Gate::allows('update-todo', $trashed_todo)) {
             abort(403, 'Unauthorized Action');
         }
-        
-        $trashed_todo = Todo::withTrashed()->find($todo->id);
-        if($trashed_todo && $trashed_todo->trashed()){
+
+        if($trashed_todo && $trashed_todo->trashed()){            
             $trashed_todo->restore();
         }
         
