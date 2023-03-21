@@ -25,9 +25,11 @@ Route::middleware([
         Route::get('/todos/{todo}/edit', [TodoController::class, 'edit']);
         Route::put('/todos/{todo}', [TodoController::class, 'update']);
         Route::get('/todos/{todo}/share', [TodoController::class, 'share']);
-        Route::post('/todos/{todo}/share', [TodoController::class, 'shareto']);
+        Route::post('/todos/{todo}/share', [TodoController::class, 'share_update']);
         Route::delete('/todos/{todo}', [TodoController::class, 'destroy']);
         Route::get('/todos/{todo}/restore', [TodoController::class, 'restore']);
+        Route::post('/todos/{todo}/complete', [TodoController::class, 'complete']);
+        Route::post('/todos/{todo}/reopen', [TodoController::class, 'reopen']);
         
 });
 Route::get('/todos/{todo}', [TodoController::class, 'show']);

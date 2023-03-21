@@ -51,6 +51,10 @@ class Todo extends Model
             $query->where('name', 'like', '%'.$filters['search'].'%')
                   ->orWhere('description', 'like', '%'.$filters['search'].'%');
         }
+        if($filters['status'] ?? false){
+            $check_value = $filters['status'] == 'done' ? 1 : 0;
+            $query->where('completed', $check_value);
+        }
         if($filters['owner'] ?? false){
             switch($filters['owner']){
                 case 'my':

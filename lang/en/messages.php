@@ -33,6 +33,8 @@ return [
     'shared_me' => 'Shared with me',
     'shared_to' => 'Shared To',
     'category' => 'Category',
+    'action_done' => 'Done',
+    'action_reopen' => 'Reopen',
     'action_edit' => 'Edit',
     'action_share' => 'Share',
     'action_delete' => 'Delete',
@@ -46,6 +48,10 @@ return [
     'password' => 'Password',
     'sign_in' => 'Sign In',
     'no_acount_instruction' => 'Don\'t have an account?',
+    'completed_info' => 'Task is completed',
+    'status_open' => 'Open Tasks',
+    'status_done' => 'Done Tasks',
+
 
 
 ];

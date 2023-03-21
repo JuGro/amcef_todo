@@ -5,7 +5,14 @@
     <div class="mx-4">        
         <x-card class="p-10">
             <div class="flex flex-col items-center justify-center text-center">             
-                <h3 class="text-2xl mb-2 font-bold">{{ $todo->name }}</h3>
+                <h3 class="text-2xl mb-2 font-bold {{ $todo->completed ? 'line-through' : '' }}">
+                    {{ $todo->name }}
+                    @if ($todo->completed)
+                        <span data-toggle="tooltip" title="{{ __('messages.completed_info') }}">
+                            <i class="fa-solid fa-check text-green-600 ml-2"></i>
+                        </span>
+                    @endif
+                </h3>
                 <x-todo-category :category="$todo->category" class="text-xl font-bold mb-4"/>
                 @php
                     $shared_users = $todo->shared_users()->get();
@@ -14,7 +21,7 @@
                     <div class="inline">
                         @foreach ($shared_users as $sUser)
                             <span>
-                                <i class="fa-solid fa-user text-green-600"></i> {{ $sUser->name }}
+                                <i class="fa-solid fa-user text-pink-500"></i> {{ $sUser->name }}
                             </span>
                         @endforeach
                     </div>    
@@ -31,10 +38,25 @@
         </x-card>
         @can('update-todo', $todo)
             <x-card class="x-card mt-4 p-2 flex space-x-6">
-                <a href="/todos/{{ $todo->id }}/edit" class="text-blue-400 px-6 py-2 rounded-xl">
+                @if($todo->completed)
+                    <form class="inline" method="POST" action="/todos/{{ $todo->id }}/reopen">
+                        @csrf                                        
+                        <button class="text-gray-600 pr-6 py-2"><i class="fa-solid fa-rotate-left">
+                            </i> {{ __('messages.action_reopen') }}
+                        </button>
+                    </form>
+                @else
+                    <form class="inline" method="POST" action="/todos/{{ $todo->id }}/complete">
+                        @csrf                                        
+                        <button class="text-green-600 pr-6 py-2"><i class="fa-solid fa-check">
+                            </i> {{ __('messages.action_done') }}
+                        </button>
+                    </form>                                    
+                @endif
+                <a href="/todos/{{ $todo->id }}/edit" class="text-blue-400 pr-6 py-2 rounded-xl">
                     <i class="fa-solid fa-pen-to-square"></i> {{ __('messages.action_edit') }}
                 </a>
-                <a href="/todos/{{ $todo->id }}/share" class="text-green-600 pr-6 py-2 rounded-xl">
+                <a href="/todos/{{ $todo->id }}/share" class="text-pink-500 pr-6 py-2 rounded-xl">
                     <i class="fa-solid fa-share-nodes"></i> {{ __('messages.action_share') }}
                 </a>
                 <form method="POST" action="/todos/{{ $todo->id }}" class="">

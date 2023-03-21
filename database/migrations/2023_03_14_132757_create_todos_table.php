@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->longText('description');
-            $table->smallInteger('status')->default(0);
+            $table->boolean('completed')->default(false);
             $table->smallInteger('category_id');
             $table->timestamps();
             $table->softDeletes();

@@ -16,7 +16,9 @@ class TodoController extends Controller
     public function index()
     {   
         return view('todos.index', [            
-            'todos' => Todo::latest()->select('todos.*')->filter(request(['category', 'search', 'owner']))->paginate(5)->withQueryString()
+            'todos' => Todo::latest()->select('todos.*')
+                        ->filter(request(['category', 'search', 'owner', 'status']))
+                        ->paginate(5)->withQueryString()
         ]);
     }
 
@@ -106,8 +108,12 @@ class TodoController extends Controller
         ]);
     }
 
-    public function shareto(Request $request, Todo $todo){                
-                
+    public function share_update(Request $request, Todo $todo){ 
+        // Make sure user is an owner
+        if (! Gate::allows('update-todo', $todo)) {
+            abort(403, 'Unauthorized Action');
+        }
+
         // Distinguish between Share and Unshare
         $share_to_ids = [];
         foreach($request['shared_users'] as $user_id){                
@@ -129,5 +135,28 @@ class TodoController extends Controller
         } 
         
         return redirect('/')->with('message', $message);        
+    }
+
+    public function complete(Todo $todo){ 
+        // Make sure user is an owner
+        if (! Gate::allows('update-todo', $todo)) {
+            abort(403, 'Unauthorized Action');
+        }
+
+        $todo->completed = true;
+        $todo->save();
+        
+        return redirect('/')->with('message', 'Task was completed!');        
+    }
+
+    public function reopen(Todo $todo){ 
+        // Make sure user is an owner
+        if (! Gate::allows('update-todo', $todo)) {
+            abort(403, 'Unauthorized Action');
+        }
+        $todo->completed = false;
+        $todo->save();
+                
+        return redirect('/')->with('message', 'Task was REOPENED!');        
     }
 }
