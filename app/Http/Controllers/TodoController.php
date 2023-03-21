@@ -108,6 +108,7 @@ class TodoController extends Controller
         ]);
     }
 
+    // Update Sharing
     public function share_update(Request $request, Todo $todo){ 
         // Make sure user is an owner
         if (! Gate::allows('update-todo', $todo)) {
@@ -137,6 +138,7 @@ class TodoController extends Controller
         return redirect('/')->with('message', $message);        
     }
 
+    // Set task as completed
     public function complete(Todo $todo){ 
         // Make sure user is an owner
         if (! Gate::allows('update-todo', $todo)) {
@@ -149,6 +151,7 @@ class TodoController extends Controller
         return redirect('/')->with('message', 'Task was completed!');        
     }
 
+    // Set task as NOT completed
     public function reopen(Todo $todo){ 
         // Make sure user is an owner
         if (! Gate::allows('update-todo', $todo)) {

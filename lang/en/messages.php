@@ -51,7 +51,4 @@ return [
     'completed_info' => 'Task is completed',
     'status_open' => 'Open Tasks',
     'status_done' => 'Done Tasks',
-
-
-
 ];

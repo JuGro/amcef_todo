@@ -33,16 +33,18 @@ class Todo extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
-    // Relationship to User
+    // Relationship to Category
     public function category()
     {
         return $this->belongsTo(Category::class, 'category_id');
     }
 
+    // Relationship to shared user
     public function shared_users(){
         return $this->belongsToMany(User::class, 'todo_user', 'todo_id', 'user_id');
     }
 
+    // Filtering queries
     public function scopeFilter($query, array $filters){        
         if($filters['category'] ?? false){
             $query->where('category_id', $filters['category']);
@@ -66,13 +68,9 @@ class Todo extends Model
                 case 'sharedme':
                     $query->join('todo_user', 'todos.id', '=', 'todo_user.todo_id')
                     ->where('todo_user.user_id', '=', auth()->user()->id);
-                    //$query->with('shared_tasks');
                     break;
                 default:
             }
-            
         }
     }
-
-
 }
